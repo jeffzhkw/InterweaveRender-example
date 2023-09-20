@@ -1,12 +1,10 @@
+#pragma once
 #include <Windows.h>
 #include <vector>
-#include <d3d11.h>
-#include <d3dcompiler.h>
 #include <iostream>
 #include "InterweaveSDK.h"
+#include "opencv2/opencv.hpp"
 
-#pragma once
-// InternalData struct exist here for debugging purpose.
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
     PAINTSTRUCT ps;
@@ -68,8 +66,8 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 
     param.render_width = 7680;
     param.render_height = 4320;
-    param.r = 6;
-    param.c = 4;
+    param.r = 6; // there are 6 rows
+    param.c = 4; // there are 4 columns
     param.lineNum = 11.983080;
     param.tg_lens = -0.154916;
 
@@ -83,8 +81,12 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     int width = 7680;
     int height = 4320;
 
+    //opencv import image. BGRA -> RGBA
+    cv::Mat exampleImage = cv::imread("example.png", cv::IMREAD_UNCHANGED);
+    cv::cvtColor(exampleImage, exampleImage, cv::COLOR_BGRA2RGBA);
 
 
+    // Raw Buffer update init
     // RGBA requires 4 bytes per pixel
     const int bytesPerPixel = 4;
 
@@ -128,6 +130,8 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
             byteBuffer[index + 3] = A;
         }
     }
+
+    // DirectX 11 update init: TODO: 'device' variable needed to be initialized to use Texture2D update.
     D3D11_TEXTURE2D_DESC texDesc = {};
     texDesc.Width = width;
     texDesc.Height = height;
@@ -143,11 +147,16 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     initData.SysMemPitch = width * bytesPerPixel;
 
     ID3D11Texture2D* pTexture = nullptr;
-    //HRESULT hr = device->CreateTexture2D(&texDesc, &initData, &pTexture); device needed to be initialized to use Texture2D update.
+    //HRESULT hr = device->CreateTexture2D(&texDesc, &initData, &pTexture); 
 
+    // DirectX 11 update call
     //app.update(pTexture);
 
-    app.update(byteBuffer.data(), byteBuffer.size());
+    // Raw buffer update call
+    //app.update(byteBuffer.data(), byteBuffer.size());
+
+    // Opencv update call
+    app.update(exampleImage.data, exampleImage.cols*exampleImage.rows*exampleImage.elemSize());
 
     while (true) {
         app.render();
