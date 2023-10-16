@@ -82,7 +82,8 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     int height = 4320;
 
     //opencv import image. BGRA -> RGBA
-    cv::Mat exampleImage = cv::imread("example.png", cv::IMREAD_UNCHANGED);
+    //cv::Mat exampleImage = cv::imread("example.png", cv::IMREAD_UNCHANGED);
+    cv::Mat exampleImage = cv::imread("example3.png", cv::IMREAD_UNCHANGED);
     cv::cvtColor(exampleImage, exampleImage, cv::COLOR_BGRA2RGBA);
 
 
@@ -137,7 +138,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     texDesc.Height = height;
     texDesc.MipLevels = 1;
     texDesc.ArraySize = 1;
-    texDesc.Format = DXGI_FORMAT_R8G8B8A8_UINT;
+    texDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
     texDesc.SampleDesc.Count = 1;
     texDesc.Usage = D3D11_USAGE_DEFAULT;
     texDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
