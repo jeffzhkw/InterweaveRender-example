@@ -82,7 +82,7 @@ int WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     int height = 4320;
 
     //opencv import image. BGRA -> RGBA
-    //cv::Mat exampleImage = cv::imread("example.png", cv::IMREAD_UNCHANGED);
+    //cv::Mat exampleImage = cv::imread("example2.jpg", cv::IMREAD_UNCHANGED);
     cv::Mat exampleImage = cv::imread("example3.png", cv::IMREAD_UNCHANGED);
     cv::cvtColor(exampleImage, exampleImage, cv::COLOR_BGRA2RGBA);
 
